@@ -27,14 +27,4 @@ def main():
    print("=======================+=======================")
    print(words[2])
    print('TATTATACGCTATTATACGCGACGCGGACGCG')
-   return 
-
-main()
-
-
-            
-            
-            
-            
-            
-        
+   return
