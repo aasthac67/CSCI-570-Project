@@ -19,17 +19,16 @@ def read_input(f):
     words.append(word)
     return words
 
-def get_alpha():
+def get_penalty():
     
     DNA = {}
     DNA['A'], DNA['C'], DNA['T'], DNA['G'] = 0, 1, 2, 3
-    
-    return [[0,110,48,94], [110,0,118,48], [48,118,0,110], [94,48,110,0]], DNA
+    return [[0,110,48,94], [110,0,118,48], [48,118,0,110], [94,48,110,0]], DNA, 30
 
 def main():
    words  = read_input(sys.argv[1])
-   alpha, DNA = get_alpha()
-
+   alpha, DNA, delta = get_penalty()
+   
    return 
 
 main()
