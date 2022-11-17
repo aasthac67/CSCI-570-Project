@@ -1,3 +1,8 @@
+import sys
+from resource import *
+import time
+import psutil
+
 def sequence_alignment(x, y, alpha, DNA, delta):
     m = len(x)
     n = len(y)
@@ -30,13 +35,29 @@ def get_penalty():
     DNA['A'], DNA['C'], DNA['T'], DNA['G'] = 0, 1, 2, 3
     return [[0,110,48,94], [110,0,118,48], [48,118,0,110], [94,48,110,0]], DNA, 30
 
+def process_memory():
+    process = psutil.Process()
+    memory_info = process.memory_info()
+    memory_consumed = int(memory_info.rss/1024)
+    return memory_consumed
+
+def time_wrapper(s1, s2):
+    start_time = time.time()
+    
+    #Call algorithms
+    alpha, DNA, delta = get_penalty()
+    dp = sequence_alignment(s1, s2, alpha, DNA, delta)
+    form_sequence(dp)
+    
+    end_time = time.time()
+    time_taken = (end_time - start_time)*1000
+    return time_taken
+
 def main():
     s1 = "ACACTGACTACTGACTGGTGACTACTGACTGG"
     s2 = "TATTATACGCTATTATACGCGACGCGGACGCG"
 
-    alpha, DNA, delta = get_penalty()
-
-    dp = sequence_alignment(s1, s2, alpha, DNA, delta)
-    form_sequence(dp)
+    print("The time taken by the algorithm is: " + time_wrapper(s1, s2))
+    print("The process memory for the algorithm is: " + process_memory())
 
 main()
