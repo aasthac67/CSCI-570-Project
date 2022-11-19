@@ -29,9 +29,12 @@ def form_sequence(dp):
     return ""
 
 def get_penalty():
-    DNA = {}
-    DNA['A'], DNA['C'], DNA['T'], DNA['G'] = 0, 1, 2, 3
-    return [[0,110,48,94], [110,0,118,48], [48,118,0,110], [94,48,110,0]], DNA, 30
+    delta = 30
+    
+    alpha = {'AA': 0, 'CC': 0, 'GG': 0, 'TT': 0, 'AC': 110, 'CA': 110, 'AG': 48, 'GA': 48, 'AT': 94, 'TA': 94,
+             'CG': 118, 'GC': 118, 'CT': 48, 'TC': 48, 'GT': 110, 'TG': 110}
+    
+    return alpha, delta
 
 def process_memory():
     process = psutil.Process()
@@ -41,14 +44,9 @@ def process_memory():
 
 def time_wrapper(s1, s2):
     start_time = time.time()
-    
-    #Call algorithms
-    delta = 30
-    
-    alpha = {'AA': 0, 'CC': 0, 'GG': 0, 'TT': 0, 'AC': 110, 'CA': 110, 'AG': 48, 'GA': 48, 'AT': 94, 'TA': 94,
-             'CG': 118, 'GC': 118, 'CT': 48, 'TC': 48, 'GT': 110, 'TG': 110}
 
-    
+    #Call algorithms
+    alpha, delta = get_penalty()
     dp = sequence_alignment(s1, s2, alpha, delta)
     form_sequence(dp)
     
@@ -60,11 +58,11 @@ def main():
     s1 = "ACACACTGACTACTGACTGGTGACTACTGACTGGACTGACTACTGACTGGTGACTACTGACTGG"
     s2 = "TATTATTATACGCTATTATACGCGACGCGGACGCGTATACGCTATTATACGCGACGCGGACGCG"
     
-    time_wrapper(s1, s2)
-
-    '''
-    print("The time taken by the algorithm is: " + time_wrapper(s1, s2))
-    print("The process memory for the algorithm is: " + process_memory())
-    '''
+    #time_wrapper(s1, s2)
+    
+    print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
+    print("The process memory for the algorithm is: " + str(process_memory()))
+    
+    return
 
 main()
