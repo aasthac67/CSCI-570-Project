@@ -25,8 +25,41 @@ def sequence_alignment(x, y, alpha, delta):
     print(dp[m][n])
     return dp
 
-def form_sequence(dp):
-    return ""
+def form_sequence(dp, s1, s2, alpha, delta):
+    m = len(s1)
+    n = len(s2)
+    
+    i, j = m, n
+    newx = ""
+    newy = ""
+    
+    while i and j:
+        string = s1[i-1] + s2[j-1]
+        if dp[i][j] == dp[i-1][j-1] + alpha[string]:
+            newx = s1[i-1] + newx
+            newy = s2[j-1] + newy
+            i -= 1
+            j -= 1
+        elif dp[i][j] == dp[i-1][j] + delta:
+            newx = s1[i-1] + newx
+            newy = "_" + newy
+            i -= 1
+        elif dp[i][j] == dp[i][j-1] + delta:
+            newx = "_" + newx
+            newy = s2[j-1] + newy
+            j -= 1
+    
+    while i:
+        newx = s1[i-1] + newx
+        newy = "_" + newy
+        i -= 1
+    
+    while j:
+       newx = "_" + newx
+       newy = s2[j-1] + newy
+       j -= 1 
+    
+    return newx, newy
 
 def get_penalty():
     delta = 30
@@ -67,7 +100,9 @@ def time_wrapper(s1, s2):
     #Call algorithms
     alpha, delta = get_penalty()
     dp = sequence_alignment(s1, s2, alpha, delta)
-    form_sequence(dp)
+    newx, newy = form_sequence(dp, s1, s2, alpha, delta)
+    print(newx)
+    print(newy)
     
     end_time = time.time()
     time_taken = (end_time - start_time)*1000
