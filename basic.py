@@ -1,7 +1,9 @@
 import sys
+'''
 from resource import *
 import time
 import psutil
+'''
 
 def sequence_alignment(x, y, alpha, delta):
     m = len(x)
@@ -17,12 +19,15 @@ def sequence_alignment(x, y, alpha, delta):
 
     for i in range(1, m+1):
         for j in range(1, n+1):
-            string = x[i-1] + y [j-1]
-            dp[i][j] = min(dp[i-1][j-1] + alpha[string],
-                                dp[i-1][j] + delta,
-                                dp[i][j-1] + delta)
+            if x[i-1] == y[j-1]:
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                key = x[i-1] + y [j-1]
+                dp[i][j] = min(dp[i-1][j-1] + alpha[key],
+                                    dp[i-1][j] + delta,
+                                    dp[i][j-1] + delta)
                 
-    print(dp[m][n])
+    print("Penalty cost: " + str(dp[m][n]))
     return dp
 
 def form_sequence(dp, s1, s2, alpha, delta):
@@ -30,36 +35,42 @@ def form_sequence(dp, s1, s2, alpha, delta):
     n = len(s2)
     
     i, j = m, n
-    newx = ""
-    newy = ""
+    newx = ''
+    newy = ''
     
-    while i and j:
-        string = s1[i-1] + s2[j-1]
-        if dp[i][j] == dp[i-1][j-1] + alpha[string]:
-            newx = s1[i-1] + newx
-            newy = s2[j-1] + newy
+    while i > 0 and j > 0:
+        if s1[i-1] == s2[j-1] :
+            newx += s1[i-1]
+            newy += s2[j-1]
             i -= 1
             j -= 1
-        elif dp[i][j] == dp[i-1][j] + delta:
-            newx = s1[i-1] + newx
-            newy = "_" + newy
-            i -= 1
-        elif dp[i][j] == dp[i][j-1] + delta:
-            newx = "_" + newx
-            newy = s2[j-1] + newy
-            j -= 1
+        else:
+            key = s1[i-1] + s2[j-1]
+            if dp[i][j] == dp[i-1][j-1] + alpha[key]:  # Mismatch
+                newx += s1[i-1]
+                newy += s2[j-1]
+                i -= 1
+                j -= 1
+            elif dp[i][j] == dp[i-1][j] + delta:        # Gap
+                newx += s1[i-1]
+                newy += '_'
+                i -= 1
+            elif dp[i][j] == dp[i][j-1] + delta:        # Gap
+                newx += '_'
+                newy += s2[j-1]
+                j -= 1
     
-    while i:
-        newx = s1[i-1] + newx
-        newy = "_" + newy
+    while i > 0:
+        newx += s1[i-1]
+        newy += '_'
         i -= 1
     
-    while j:
-       newx = "_" + newx
-       newy = s2[j-1] + newy
+    while j > 0:
+       newx += '_'
+       newy += s2[j-1]
        j -= 1 
     
-    return newx, newy
+    return newx[::-1], newy[::-1]
 
 def get_penalty():
     delta = 30
@@ -88,14 +99,16 @@ def read_input(f):
     words.append(word)
     return words[1:]
 
+'''
 def process_memory():
     process = psutil.Process()
     memory_info = process.memory_info()
     memory_consumed = int(memory_info.rss/1024)
     return memory_consumed
+'''
 
 def time_wrapper(s1, s2):
-    start_time = time.time()
+    # start_time = time.time()
 
     #Call algorithms
     alpha, delta = get_penalty()
@@ -104,17 +117,22 @@ def time_wrapper(s1, s2):
     print(newx)
     print(newy)
     
+    '''
     end_time = time.time()
     time_taken = (end_time - start_time)*1000
     return time_taken
+    '''
 
 def main():
     words = read_input(sys.argv[1])
+    # words = read_input("UploadedProject\SampleTestCases\input1.txt")
     
     s1, s2 = words[0], words[1]
     
-    print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
-    print("The process memory for the algorithm is: " + str(process_memory()))
+    time_wrapper(s1, s2)
+    
+    # print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
+    # print("The process memory for the algorithm is: " + str(process_memory()))
     
     return
 
