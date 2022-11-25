@@ -51,14 +51,14 @@ def form_sequence(dp, s1, s2, alpha, delta):
                 newy += s2[j-1]
                 i -= 1
                 j -= 1
-            elif dp[i][j] == dp[i-1][j] + delta:        # Gap
-                newx += s1[i-1]
-                newy += '_'
-                i -= 1
             elif dp[i][j] == dp[i][j-1] + delta:        # Gap
                 newx += '_'
                 newy += s2[j-1]
                 j -= 1
+            elif dp[i][j] == dp[i-1][j] + delta:        # Gap
+                newx += s1[i-1]
+                newy += '_'
+                i -= 1
     
     while i > 0:
         newx += s1[i-1]
@@ -68,7 +68,7 @@ def form_sequence(dp, s1, s2, alpha, delta):
     while j > 0:
        newx += '_'
        newy += s2[j-1]
-       j -= 1 
+       j -= 1
     
     return newx[::-1], newy[::-1]
 
@@ -122,6 +122,7 @@ def time_wrapper(s1, s2):
     time_taken = (end_time - start_time)*1000
     return time_taken
     '''
+    return newx, newy
 
 def main():
     words = read_input(sys.argv[1])
@@ -129,11 +130,11 @@ def main():
     
     s1, s2 = words[0], words[1]
     
-    time_wrapper(s1, s2)
+    newx, newy = time_wrapper(s1, s2)
     
     # print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
     # print("The process memory for the algorithm is: " + str(process_memory()))
     
-    return
+    return newx, newy
 
 main()
