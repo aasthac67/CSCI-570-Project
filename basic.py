@@ -1,9 +1,7 @@
 import sys
-'''
 from resource import *
 import time
 import psutil
-'''
 
 def sequence_alignment(x, y, alpha, delta):
     m = len(x)
@@ -99,16 +97,14 @@ def read_input(f):
     words.append(word)
     return words[1:]
 
-'''
 def process_memory():
     process = psutil.Process()
     memory_info = process.memory_info()
     memory_consumed = int(memory_info.rss/1024)
     return memory_consumed
-'''
 
 def time_wrapper(s1, s2):
-    # start_time = time.time()
+    start_time = time.time()
 
     #Call algorithms
     alpha, delta = get_penalty()
@@ -117,24 +113,16 @@ def time_wrapper(s1, s2):
     print(newx)
     print(newy)
     
-    '''
     end_time = time.time()
     time_taken = (end_time - start_time)*1000
     return time_taken
-    '''
-    return newx, newy
 
 def main():
     words = read_input(sys.argv[1])
-    # words = read_input("UploadedProject\SampleTestCases\input1.txt")
     
     s1, s2 = words[0], words[1]
     
-    newx, newy = time_wrapper(s1, s2)
-    
-    # print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
-    # print("The process memory for the algorithm is: " + str(process_memory()))
-    
-    return newx, newy
+    print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
+    print("The process memory for the algorithm is: " + str(process_memory()))
 
 main()
