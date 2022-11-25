@@ -25,7 +25,7 @@ def sequence_alignment(x, y, alpha, delta):
                                     dp[i-1][j] + delta,
                                     dp[i][j-1] + delta)
                 
-    print("Penalty cost: " + str(dp[m][n]))
+    print(dp[m][n])
     return dp
 
 def form_sequence(dp, s1, s2, alpha, delta):
@@ -122,7 +122,7 @@ def main():
     
     s1, s2 = words[0], words[1]
     
-    print("The time taken by the algorithm is: " + str(time_wrapper(s1, s2)))
-    print("The process memory for the algorithm is: " + str(process_memory()))
+    print(time_wrapper(s1, s2))
+    print(process_memory())
 
 main()
